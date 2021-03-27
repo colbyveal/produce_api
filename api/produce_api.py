@@ -1,17 +1,36 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+from string import ascii_uppercase, digits
+from random import choices
 
 app = Flask (__name__)
 api = Api(app)
 
+"""PRODUCE - TYPE: dict
+    Key: 
+        produce code: 19 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case sensitive
+    Value:
+        produce code: 19 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case sensitive 
+        name: Case sensitive alphanumeric string
+        price: number with exactly 2 decimal places
+"""
 PRODUCE = {
-    'A12T-4GH7-QPL9-3N4M': {'name': 'Lettuce', 'price': 3.46},
-    'E5T6-9UI3-TH15-QR88': {'name': 'Peach', 'price': 2.99},
-    'YRT6-72AS-K736-L4AR': {'name': 'Green Pepper', 'price': 0.79},
-    'TQ4C-VV6T-75ZX-1RMR': {'name': 'Gala  Apple', 'price': 3.59}
+    'A12T-4GH7-QPL9-3N4M': {'produce code': 'A12T-4GH7-QPL9-3N4M', 'name': 'Lettuce', 'price': 3.46},
+    'E5T6-9UI3-TH15-QR88': {'produce code': 'E5T6-9UI3-TH15-QR88', 'name': 'Peach', 'price': 2.99},
+    'YRT6-72AS-K736-L4AR': {'produce code': 'YRT6-72AS-K736-L4AR', 'name': 'Green Pepper', 'price': 0.79},
+    'TQ4C-VV6T-75ZX-1RMR': {'produce code': 'TQ4C-VV6T-75ZX-1RMR', 'name': 'Gala  Apple', 'price': 3.59}
 }
 
 parser = reqparse.RequestParser()
+
+def createProduceCode():
+    codeChunk1 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeChunk2 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeChunk3 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeChunk4 = ''.join(choices(ascii_uppercase+digits, k=4));
+    produceCode = codeChunk1 + '-' + codeChunk2 + '-' + codeChunk3 + '-' + codeChunk4
+    print(produceCode)
+    return produceCode
 
 class ProducesList(Resource):
     def get(self):
@@ -21,9 +40,9 @@ class ProducesList(Resource):
         parser.add_argument("name")
         parser.add_argument("price")
         args = parser.parse_args()
-        produce_id = int(max(PRODUCE.keys()))  + 1
-        produce_id = '%i' % produce_id
+        produce_id = createProduceCode()
         PRODUCE[produce_id] = {
+            "produce code": produce_id,
             "name": args["name"],
             "price": args["price"]
         }                
@@ -38,7 +57,8 @@ class Produce(Resource):
             return PRODUCE[produce_id]
             
     def put(self, produce_id):
-        parser.add_argument("name", type=string, help="Name ")
+        parser.add_argument("produce code")
+        parser.add_argument("name")
         parser.add_argument("price")
         args = parser.parse_args()
 
@@ -46,9 +66,10 @@ class Produce(Resource):
             return 'Not found', 404
         else:
             produce = PRODUCE[produce_id]
+            produce['produce code'] = args['produce code'] if args ['produce code'] is not None else produce ['produce code']
             produce['name'] = args['name'] if args ["name"] is not None else produce ["name"]
             produce['price'] = args['price'] if args ["price"] is not None else produce ["price"]
-            return PRODUCE[produce_id]
+            return PRODUCE[produce_id], 200
 
     def delete(self, produce_id):
         if produce_id not in PRODUCE:
