@@ -8,10 +8,11 @@ api = Api(app)
 
 """PRODUCE - TYPE: dict
     Key: 
-        produce code: 19 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case sensitive
+        produce code: 19 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case insensitive
     Value:
-        produce code: 19 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case sensitive 
-        name: Case sensitive alphanumeric string
+        produce code: 16 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case insensitive
+            use generateProduceCode() to generate a unique code when POSTing new produce
+        name: Case insensitive alphanumeric string
         price: number with exactly 2 decimal places
 """
 PRODUCE = {
@@ -23,7 +24,7 @@ PRODUCE = {
 
 parser = reqparse.RequestParser()
 
-def createProduceCode():
+def generateProduceCode():
     codeChunk1 = ''.join(choices(ascii_uppercase+digits, k=4));
     codeChunk2 = ''.join(choices(ascii_uppercase+digits, k=4));
     codeChunk3 = ''.join(choices(ascii_uppercase+digits, k=4));
@@ -31,6 +32,13 @@ def createProduceCode():
     produceCode = codeChunk1 + '-' + codeChunk2 + '-' + codeChunk3 + '-' + codeChunk4
     print(produceCode)
     return produceCode
+
+def validateName(name):
+    isValidName = name.isalnum()
+    if isValidName:
+        return name
+    else:
+        return 400
 
 class ProducesList(Resource):
     def get(self):
@@ -40,7 +48,11 @@ class ProducesList(Resource):
         parser.add_argument("name")
         parser.add_argument("price")
         args = parser.parse_args()
-        produce_id = createProduceCode()
+
+        if validateName(args["name"]) == 400:
+            return "Invalid request", 400
+
+        produce_id = generateProduceCode()
         PRODUCE[produce_id] = {
             "produce code": produce_id,
             "name": args["name"],
