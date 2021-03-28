@@ -2,29 +2,34 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from string import ascii_uppercase, digits
 from random import choices
+import json
 
 app = Flask (__name__)
 api = Api(app)
 parser = reqparse.RequestParser()
 
 """
+Info about Data Struct for storing produce --
+
 PRODUCE - TYPE: dict
     Key: 
         produce code: 16 char string consisting of 4 'dash-seperated' 4 character strings (19 chars total). Alphanumeric and case insensitive
     Value:
         stuct:
-            produce code: 16 char string consisting of 4 dash seperated 4 character strings. Alphanumeric and case insensitive
+            produce code: 16 char string consisting of 4 dash seperated 4 character strings (19 chars total). Alphanumeric and case insensitive
                 use generateProduceCode() to generate a unique code when POSTing new produce
                 not passed in via api-call
             name: Case insensitive alphanumeric string
             price: number with exactly 2 decimal places
+
+initial json:
+    PRODUCE = {
+        'A12T-4GH7-QPL9-3N4M': {'produce code': 'A12T-4GH7-QPL9-3N4M', 'name': 'Lettuce', 'price': 3.46},
+        'E5T6-9UI3-TH15-QR88': {'produce code': 'E5T6-9UI3-TH15-QR88', 'name': 'Peach', 'price': 2.99},
+        'YRT6-72AS-K736-L4AR': {'produce code': 'YRT6-72AS-K736-L4AR', 'name': 'Green Pepper', 'price': 0.79},
+        'TQ4C-VV6T-75ZX-1RMR': {'produce code': 'TQ4C-VV6T-75ZX-1RMR', 'name': 'Gala  Apple', 'price': 3.59}
+    }
 """
-PRODUCE = {
-    'A12T-4GH7-QPL9-3N4M': {'produce code': 'A12T-4GH7-QPL9-3N4M', 'name': 'Lettuce', 'price': 3.46},
-    'E5T6-9UI3-TH15-QR88': {'produce code': 'E5T6-9UI3-TH15-QR88', 'name': 'Peach', 'price': 2.99},
-    'YRT6-72AS-K736-L4AR': {'produce code': 'YRT6-72AS-K736-L4AR', 'name': 'Green Pepper', 'price': 0.79},
-    'TQ4C-VV6T-75ZX-1RMR': {'produce code': 'TQ4C-VV6T-75ZX-1RMR', 'name': 'Gala  Apple', 'price': 3.59}
-}
 
 """
 ensureUniqueItem ensures incoming item is not already in database
@@ -128,5 +133,8 @@ class Produce(Resource):
 api.add_resource(ProduceList, '/produce/')
 api.add_resource(Produce, '/produce/<produce_id>')
 
+
 if __name__ == '__main__':
+    with open('../data/db.json') as f:
+        PRODUCE = json.load(f)
     app.run(debug=True)
