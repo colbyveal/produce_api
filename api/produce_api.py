@@ -27,17 +27,14 @@ PRODUCE = {
 }
 
 """
-generateProduceCode will generate a unique code for each produce in our dict
-    produce code: 16 char string consisting of 4 'dash-seperated' 4 character strings (19 chars total). Alphanumeric and case insensitive
-    example: A12T-4GH7-QPL9-3N4M
+ensureUniqueItem ensures incoming item is not already in database
+    checks if name is already associated with an item
 """
-def generateProduceCode():
-    codeChunk1 = ''.join(choices(ascii_uppercase+digits, k=4));
-    codeChunk2 = ''.join(choices(ascii_uppercase+digits, k=4));
-    codeChunk3 = ''.join(choices(ascii_uppercase+digits, k=4));
-    codeChunk4 = ''.join(choices(ascii_uppercase+digits, k=4));
-    produceCode = codeChunk1 + '-' + codeChunk2 + '-' + codeChunk3 + '-' + codeChunk4
-    return produceCode
+def ensureUniqueItem(name):
+    for produce_id, produce in PRODUCE.items():
+        if produce['name'].capitalize() == name.capitalize():
+            return False
+    return True
 
 """
 validateName checks to ensure incoming name is valid
@@ -50,28 +47,55 @@ def validateName(name):
    return isValidName
 
 """
-formatPrice ensures incoming price is of format #.##
+validatePrice ensures incoming price is a number
     ensures price is a number
-    will add 0's or round if needed
 """
-def formatPrice(price):
+def validatePrice(price):
     try:
         numPrice = float(price)
-        return '{:.2f}'.format(numPrice)
+        return True
     except:
         return False
 
 """
-ensureUniqueItem ensures incoming item is not already in database
-    checks if name is already associated with an item
+performValidation executes validation functions all at once
+    see individual functions for details
 """
-def ensureUniqueItem(name):
-    for produce_id in PRODUCE:
-        if PRODUCE[produce_id]['name'].capitalize == name.capitalize:
-            return False
-        return True
+def performValidation(name, price):
 
-class ProducesList(Resource):
+    if not ensureUniqueItem(name):
+        return False
+
+    if not validateName(name):
+        return False
+
+    if not validatePrice(price):
+        return False
+
+    return True
+
+"""
+generateProduceCode will generate a unique code for each produce in our dict
+    produce code: 16 char string consisting of 4 'dash-seperated' 4 character string segments (19 chars total). Alphanumeric and case insensitive
+    example: A12T-4GH7-QPL9-3N4M
+"""
+def generateProduceCode():
+    codeSegment1 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeSegment2 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeSegment3 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeSegment4 = ''.join(choices(ascii_uppercase+digits, k=4));
+    produceCode = codeSegment1 + '-' + codeSegment2 + '-' + codeSegment3 + '-' + codeSegment4
+    return produceCode
+
+"""
+formatPrice ensures that price is in the proper format #.##
+    will add 0's if not enough numbers after decimal
+    will round if too many number after decimal
+"""
+def formatPrice(price):
+    return "{:.2f}".format(float(price))
+
+class ProduceList(Resource):
     def get(self):
         return PRODUCE
 
@@ -80,26 +104,19 @@ class ProducesList(Resource):
         parser.add_argument("price")
         args = parser.parse_args()
 
-        if not ensureUniqueItem(args["name"]):
-            return "Invalid request", 400
+        if not performValidation(args['name'], args['price']):
+            return "Invalid Request", 400
 
-        formattedPrice = formatPrice(args["price"])
-
-        if not validateName(args["name"]):
-            return "Invalid request", 400
-
-        if not formattedPrice:
-            return "Invalid request", 400
-
+        formattedPrice = formatPrice(args['price'])
         produce_id = generateProduceCode()
+
         PRODUCE[produce_id] = {
             "produce code": produce_id,
             "name": args["name"],
             "price": formattedPrice
         }
-        print(PRODUCE[produce_id]['name'])                
-        return PRODUCE[produce_id], 201
 
+        return PRODUCE[produce_id], 201
 
 class Produce(Resource):
     def get(self, produce_id):
@@ -107,30 +124,8 @@ class Produce(Resource):
             return 'Not found', 404
         else:
             return PRODUCE[produce_id]
-            
-    def put(self, produce_id):
-        parser.add_argument("produce code")
-        parser.add_argument("name")
-        parser.add_argument("price")
-        args = parser.parse_args()
 
-        if produce_id not in PRODUCE:
-            return 'Not found', 404
-        else:
-            produce = PRODUCE[produce_id]
-            produce['produce code'] = args['produce code'] if args ['produce code'] is not None else produce ['produce code']
-            produce['name'] = args['name'] if args ["name"] is not None else produce ["name"]
-            produce['price'] = args['price'] if args ["price"] is not None else produce ["price"]
-            return PRODUCE[produce_id], 200
-
-    def delete(self, produce_id):
-        if produce_id not in PRODUCE:
-            return 'Not found', 404
-        else:
-            del PRODUCE[produce_id]
-            return '', 204
-
-api.add_resource(ProducesList, '/produce/')
+api.add_resource(ProduceList, '/produce/')
 api.add_resource(Produce, '/produce/<produce_id>')
 
 if __name__ == '__main__':
