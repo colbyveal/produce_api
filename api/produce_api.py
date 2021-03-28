@@ -35,6 +35,10 @@ initial json:
 ensureUniqueItem ensures incoming item is not already in database
     checks if name is already associated with an item
 """
+
+with open('../data/db.json') as f:
+    PRODUCE = json.load(f)
+
 def ensureUniqueItem(name):
     for produce_id, produce in PRODUCE.items():
         if produce['name'].capitalize() == name.capitalize():
@@ -135,6 +139,4 @@ api.add_resource(Produce, '/produce/<produce_id>')
 
 
 if __name__ == '__main__':
-    with open('../data/db.json') as f:
-        PRODUCE = json.load(f)
     app.run(debug=True)
