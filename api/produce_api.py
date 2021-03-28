@@ -61,6 +61,16 @@ def formatPrice(price):
     except:
         return False
 
+"""
+ensureUniqueItem ensures incoming item is not already in database
+    checks if name is already associated with an item
+"""
+def ensureUniqueItem(name):
+    for produce_id in PRODUCE:
+        if PRODUCE[produce_id]['name'].capitalize == name.capitalize:
+            return False
+        return True
+
 class ProducesList(Resource):
     def get(self):
         return PRODUCE
@@ -69,6 +79,9 @@ class ProducesList(Resource):
         parser.add_argument("name")
         parser.add_argument("price")
         args = parser.parse_args()
+
+        if not ensureUniqueItem(args["name"]):
+            return "Invalid request", 400
 
         formattedPrice = formatPrice(args["price"])
 
@@ -83,7 +96,8 @@ class ProducesList(Resource):
             "produce code": produce_id,
             "name": args["name"],
             "price": formattedPrice
-        }                
+        }
+        print(PRODUCE[produce_id]['name'])                
         return PRODUCE[produce_id], 201
 
 
