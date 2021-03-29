@@ -87,7 +87,7 @@ This data is loaded into a python `dict` structure, with the KEY being produce_c
 
 **Show all produce**
 
-GET /produce/
+GET /produce
 
 ```http
 http://127.0.0.1:5000/produce
@@ -183,7 +183,7 @@ Response (Example):
 
 ### Delete Produce by Produce Code
 
-DELETE /produce/\<produce_code>
+DELETE /produce/:produce_code
 
 ```http
 http://127.0.0.1:5000/produce/A12T-4GH7-QPL9-3N4M
@@ -217,8 +217,6 @@ This will perform the following tasks:
 
 - Start test server as a background process
 - Execute unit_test.py and integration_test.py with HTML reporting enabled
-- Kill background process after testing is complete
-  - **NOTE:** The killing of this process will stop all processes w/ 'python' in the name.
 
 ### Starting the Server
 
