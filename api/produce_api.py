@@ -31,14 +31,13 @@ initial json:
     }
 """
 
+with open('../data/db.json') as f:
+    PRODUCE = json.load(f)
+
 """
 ensureUniqueItem ensures incoming item is not already in database
     checks if name is already associated with an item
 """
-
-with open('../data/db.json') as f:
-    PRODUCE = json.load(f)
-
 def ensureUniqueItem(name):
     for produce_id, produce in PRODUCE.items():
         if produce['name'].capitalize() == name.capitalize():
@@ -133,6 +132,13 @@ class Produce(Resource):
             return 'Not found', 404
         else:
             return PRODUCE[produce_id]
+
+    def delete(self, produce_id):
+        if produce_id not in PRODUCE:
+            return 'Not found', 404
+        else:
+            del PRODUCE[produce_id]
+            return '', 204
 
 api.add_resource(ProduceList, '/produce/')
 api.add_resource(Produce, '/produce/<produce_id>')
