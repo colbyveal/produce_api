@@ -1,54 +1,77 @@
 import pytest
 import produce_api
 
+PRODUCE = {
+    "A12T-4GH7-QPL9-3N4M": {
+        "produce_code": "A12T-4GH7-QPL9-3N4M",
+        "name": "Lettuce",
+        "price": 3.46
+    },
+    "E5T6-9UI3-TH15-QR88": {
+        "produce_code": "E5T6-9UI3-TH15-QR88",
+        "name": "Peach",
+        "price": 2.99
+    },
+    "YRT6-72AS-K736-L4AR": {
+        "produce_code": "YRT6-72AS-K736-L4AR",
+        "name": "Green Pepper",
+        "price": 0.79
+    },
+    "TQ4C-VV6T-75ZX-1RMR": {
+        "produce_code": "TQ4C-VV6T-75ZX-1RMR",
+        "name": "Gala  Apple",
+        "price": 3.59
+    }
+}
+
 '''
 ensureUniqueItem tests
 '''
 def test_ensureUniqueItem_Success():
-    response = produce_api.ensureUniqueItem('newItem')
-    assert response == True
+    result = produce_api.ensureUniqueItem('newItem', PRODUCE)
+    assert result == True
 
 def test_ensureUniqueItem_Fail_ExactMatch():
-    response = produce_api.ensureUniqueItem('Lettuce')
-    assert response == False
+    result = produce_api.ensureUniqueItem('Lettuce', PRODUCE)
+    assert result == False
 
 def test_ensureUniqueItem_Fail_CaseInsensitiveMatch():
-    response = produce_api.ensureUniqueItem('leTtucE')
-    assert response == False
+    result = produce_api.ensureUniqueItem('leTtucE', PRODUCE)
+    assert result == False
 
 '''
 validateName Tests
 '''
 def test_validateName_Success():
-    response = produce_api.validateName('alph4numer1c')
-    assert response == True
+    result = produce_api.validateName('alph4numer1c')
+    assert result == True
 
 def test_validateName_Fail_NonAlphanumeric():
-    response = produce_api.validateName('non@lph@numeric')
-    assert response == False
+    result = produce_api.validateName('non@lph@numeric')
+    assert result == False
 
 def test_validateName_Fail_EmptyString():
-    response = produce_api.validateName('')
-    assert response == False
+    result = produce_api.validateName('')
+    assert result == False
 
 def test_validateName_Fail_Spaces():
-    response = produce_api.validateName('name with spaces')
-    assert response == False
+    result = produce_api.validateName('name with spaces')
+    assert result == False
 
 '''
 validatePrice Tests
 '''
 def test_validePrice_Success_Int():
-    response = produce_api.validatePrice(2)
-    assert response == True
+    result = produce_api.validatePrice(2)
+    assert result == True
 
 def test_validePrice_Success_Decimal():
-    response = produce_api.validatePrice(2.55)
-    assert response == True
+    result = produce_api.validatePrice(2.55)
+    assert result == True
 
 def test_validePrice_Fail_NonNumber():
-    response = produce_api.validatePrice('non number')
-    assert response == False
+    result = produce_api.validatePrice('non number')
+    assert result == False
 
 '''
 generateProduceCode Tests
@@ -105,22 +128,52 @@ def test_formatPrice_Success_LargeDecimalAmount():
 performValidation Tests
 '''
 def test_performValidation_Success_ValidAndUnique():
-    response = produce_api.performValidation('name', '2.50')
-    assert response == True
+    result = produce_api.performValidation('name', '2.50', PRODUCE)
+    assert result == True
 
 def test_performValidation_Fail_NonUnique():
-    response = produce_api.performValidation('Lettuce', '2.50')
-    assert response == False
+    result = produce_api.performValidation('Lettuce', '2.50', PRODUCE)
+    assert result == False
 
 
 def test_performValidation_Fail_NameNonValid():
-    response = produce_api.performValidation('nonV@lidN@me', '2.50')
-    assert response == False
+    result = produce_api.performValidation('nonV@lidN@me', '2.50', PRODUCE)
+    assert result == False
 
 
 def test_performValidation_Fail_PriceNonValid():
-    response = produce_api.performValidation('validName', 'treefiddy')
-    assert response == False
+    result = produce_api.performValidation('validName', 'treefiddy', PRODUCE)
+    assert result == False
+
+'''
+transformData Tests
+'''
+def test_transformData_Success():
+    result = produce_api.transformData(PRODUCE)
+    assert result == {
+    "produce": [
+        {
+            "produce_code": "A12T-4GH7-QPL9-3N4M",
+            "name": "Lettuce",
+            "price": 3.46
+        },
+        {
+            "produce_code": "E5T6-9UI3-TH15-QR88",
+            "name": "Peach",
+            "price": 2.99
+        },
+        {
+            "produce_code": "YRT6-72AS-K736-L4AR",
+            "name": "Green Pepper",
+            "price": 0.79
+        },
+        {
+            "produce_code": "TQ4C-VV6T-75ZX-1RMR",
+            "name": "Gala  Apple",
+            "price": 3.59
+        }
+    ]
+}
 
 
 
