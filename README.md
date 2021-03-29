@@ -6,9 +6,17 @@ Produce API is a simple python api allowing for management of produce inventory
 
 ## Dependencies
 
-Before using Produce API, the following dependencies must be installed on the system:
+Before using Produce API, the following dependencies must be installed on the system. First, you need Python:
 
 - [Python v3.9.2](https://www.python.org/downloads/release/python-392/)
+
+You call install all other dependencies via:
+
+```
+pip install flask flask-RESTful pytest pytest-html requests
+```
+
+Or individually via:
 
 - flask v1.1.2+
 
