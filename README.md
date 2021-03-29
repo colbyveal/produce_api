@@ -10,10 +10,12 @@ Before using Produce API, the following dependencies must be installed on the sy
 
 - [Python v3.9.2](https://www.python.org/downloads/release/python-392/)
 
+A list of pip requirements can be found in `requirements.txt`
+
 You call install all other dependencies via:
 
 ```
-pip install flask flask-RESTful pytest pytest-html requests
+pip install -r requirements.txt
 ```
 
 Or individually via:
@@ -22,7 +24,7 @@ Or individually via:
 
   ​	`pip install flask`
 
-- flask_restful v0.3.9+
+- flask_restful v0.3.8+
 
   ​	`pip install  flask-RESTful`
 
