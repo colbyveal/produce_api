@@ -46,6 +46,9 @@ jobs:
       - name: Run Docker Container
         run: docker-compose up -d
 
+      - name: Ensure Container has spawned
+        run: docker ps
+
       - name: Run Integration tests
         run: pytest integration_test.py --junitxml="integratio_test.xml"
         working-directory: api
