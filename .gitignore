@@ -1,0 +1,5 @@
+api/assets/*
+api/.pytest_cache/*
+api/__pycache__/*
+api/nohup.out
+api/report.html
