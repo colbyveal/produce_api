@@ -1,0 +1,7 @@
+.dockerignore
+Dockerfile
+api/.pytest_cache
+api/__pycache__
+api/assets
+api/nohup.out
+api/report.html

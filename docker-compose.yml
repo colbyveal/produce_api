@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  api:
+    container_name: produce_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 5000:5000
+    environment: 
+      - COMPOSE_CONVERT_WINDOWS_PATHS=1
