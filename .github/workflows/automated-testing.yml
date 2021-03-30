@@ -1,23 +1,28 @@
 name: automated-testing
 on: [push]
 jobs:
-  run-docker-container:
+  run-unit-tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+  
     steps:
       - name: Check out repo
         uses: actions/checkout@v1
 
+      - name: Install Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       - name: Run unit tests
-        run: cd api
-        run: pytest unit_test.py
-        run: cd ..
-
-      - name: Build docker container
-        run: docker-compose build
-      
-      - name: Run docker container
-        run: docker-compose up -d
-
-      - name: Run integration tests
-        run: cd api
-        run: pytest integration_test.py
+        run: pytest unit_test.py --junitxml="result.xml"
+        working-directory: api
+        
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: api/result.xml
