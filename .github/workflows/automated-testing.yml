@@ -18,11 +18,40 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run unit tests
-        run: pytest unit_test.py --junitxml="result.xml"
+        run: pytest unit_test.py --junitxml="unit_test.xml"
         working-directory: api
         
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: api/result.xml
+          files: api/unit_test.xml
+
+  run-integration-tests:
+    needs: run-unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v1
+
+      - name: Install Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build Docker Container
+        run: docker-compose build
+
+      - name: Run Docker Container
+        run: docker-compose up -d
+
+      - name: Run Integration tests
+        run: pytest integration_test.py --junitxml="integratio_test.xml"
+        working-directory: api
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: api/integration_test.xml
