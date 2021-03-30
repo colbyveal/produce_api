@@ -3,7 +3,6 @@ from flask import request
 from flask_restful import Resource, Api, reqparse
 from string import ascii_uppercase, digits
 from random import choices
-import json
 from types import SimpleNamespace
 
 app = Flask (__name__)

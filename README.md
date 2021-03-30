@@ -126,7 +126,7 @@ Response (Example):
 }
 ```
 
-### Get Produce via Produce Code
+**Get Produce via Produce Code**
 
 GET /produce/:produceCode
 
@@ -181,7 +181,7 @@ Response (Example):
   - `name` is non-alphanumeric
   - `price` is not a number
 
-### Delete Produce by Produce Code
+**Delete Produce by Produce Code**
 
 DELETE /produce/:produce_code
 
@@ -253,6 +253,38 @@ In order to run all tests:
 For test reporting, it is recommended to use the `pytest-html` module. You can run pytest locally and produce an html report by running:
 
 ​	`pytest --html=report.html`
+
+## Docker
+
+Provided is a Dockerfile and docker-compose.yml file for use with setting up and running with-in docker.
+
+### Steps to build docker container
+
+First, we need to build the container:
+
+```
+docker-compose build
+```
+
+Then, we need to start the container running:
+
+```
+docker-compose up -d
+```
+
+This will spawn the container. You can confirm the container is running with the command:
+
+```
+docker container ps
+```
+
+This will return information about the container, as well as the container id
+
+To kill the docker container:
+
+```
+docker kill <container id>
+```
 
 
 
