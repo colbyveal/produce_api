@@ -108,6 +108,7 @@ def test_formatPrice_Success_SingleDecimal():
     formatted = produce_api.formatPrice(2.6)
     assert formatted == '2.60'
 
+'python rounding returns this value, so it is what I am using'
 def test_formatPrice_Success_TwoDecimal():
     formatted = produce_api.formatPrice(2.65)
     assert formatted == '2.65'
