@@ -95,10 +95,10 @@ generateProduceCode will generate a unique code for each produce in our dict
     example: A12T-4GH7-QPL9-3N4M
 """
 def generateProduceCode():
-    codeSegment1 = ''.join(choices(ascii_uppercase+digits, k=4));
-    codeSegment2 = ''.join(choices(ascii_uppercase+digits, k=4));
-    codeSegment3 = ''.join(choices(ascii_uppercase+digits, k=4));
-    codeSegment4 = ''.join(choices(ascii_uppercase+digits, k=4));
+    codeSegment1 = ''.join(choices(ascii_uppercase+digits, k=4))
+    codeSegment2 = ''.join(choices(ascii_uppercase+digits, k=4))
+    codeSegment3 = ''.join(choices(ascii_uppercase+digits, k=4))
+    codeSegment4 = ''.join(choices(ascii_uppercase+digits, k=4))
     produceCode = codeSegment1 + '-' + codeSegment2 + '-' + codeSegment3 + '-' + codeSegment4
     return produceCode
 

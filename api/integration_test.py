@@ -5,6 +5,10 @@ import produce_api
 
 url="http://127.0.0.1:5000"
 
+def test_GET_badPath_Fail():
+    response = requests.get(url + '/path-does-not-exist')
+    assert response.status_code == 404
+
 def test_GET_produceList_Success():
     response = requests.get(url + '/produce')
     assert response.ok
@@ -51,7 +55,7 @@ def test_POST_AND_DELETE_newProduct_Success():
     assert jsonResponse['price'] == '2.00'
     prodCode = jsonResponse['produce_code']
 
-    'remove after to ensure subsequent test runs still pass'
+    'test delete'
     delResponse = requests.delete(url + '/produce/' + prodCode)
     assert delResponse.status_code == 204
 
@@ -71,7 +75,7 @@ def test_POST_newProduct_Fail_ProductAlreadyInDB():
     assert response.reason == "CONFLICT"
 
 def test_DELETE_product_Fail_NotFound():
-    response = requests.get(url + '/produce' + '/CODE-ISNT-HERE-OOPS')
+    response = requests.delete(url + '/produce' + '/CODE-ISNT-HERE-OOPS')
     assert response.status_code == 404
     assert response.reason == "NOT FOUND"
 
