@@ -34,17 +34,17 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v1
 
-      - name: Install Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
       - name: Build Docker Container
         run: docker-compose build
 
       - name: Run Docker Container
         run: docker-compose up -d
+
+      - name: Install Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Ensure Container has spawned
         run: docker ps
