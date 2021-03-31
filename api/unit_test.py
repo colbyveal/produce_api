@@ -175,3 +175,8 @@ def test_transformData_Success():
         }
     ]
 }
+
+'populateDatabase Tests'
+def test_propulateDatabase_Success():
+    result = produce_api.populateDatabase('../data/db.json')
+    assert result == PRODUCE
