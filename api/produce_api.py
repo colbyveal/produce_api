@@ -82,10 +82,10 @@ def performValidation(name, price, PRODUCE):
         return "Conflict", 409
 
     if not validateName(name):
-        return "InvalidInput", 480
+        return "Bad Request", 400
 
     if not validatePrice(price):
-        return "InvalidInput", 480
+        return "Bad Request", 400
 
     return 200
 

@@ -10,6 +10,8 @@ Before using Produce API, the following dependencies must be installed on the sy
 
 - [Python v3.9](https://www.python.org/downloads/release/python-392/)
 
+**NOTE**: If at any point the `python` commands do not work for you, it is likely a conflict of python versions on your machine. Instead, call `python3` and this should resolve the issue.
+
 A list of pip requirements can be found in `requirements.txt`
 
 You call install all other dependencies via:
@@ -191,11 +193,11 @@ Response body:
      -  Status Code: 409
      -  Error Code: Conflict
   -  `name` is non-alphanumeric
-     - Status Code:480 
-     - Error Code: Invalid Input
+     - Status Code: 400 
+     - Error Code: Bad Request
   -  `price` is not a number
-     - Status Code: 480 
-     - Error Code: Invalid Input
+     - Status Code: 400 
+     - Error Code: Bad Request
 
 **Delete Produce by Produce Code**
 

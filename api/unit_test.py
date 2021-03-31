@@ -129,21 +129,21 @@ performValidation Tests
 '''
 def test_performValidation_Success_ValidAndUnique():
     result = produce_api.performValidation('name', '2.50', PRODUCE)
-    assert result == True
+    assert result == 200
 
 def test_performValidation_Fail_NonUnique():
     result = produce_api.performValidation('Lettuce', '2.50', PRODUCE)
-    assert result == False
+    assert result == ("Conflict", 409)
 
 
 def test_performValidation_Fail_NameNonValid():
     result = produce_api.performValidation('nonV@lidN@me', '2.50', PRODUCE)
-    assert result == False
+    assert result == ("Bad Request", 400)
 
 
 def test_performValidation_Fail_PriceNonValid():
     result = produce_api.performValidation('validName', 'treefiddy', PRODUCE)
-    assert result == False
+    assert result == ("Bad Request", 400)
 
 '''
 transformData Tests

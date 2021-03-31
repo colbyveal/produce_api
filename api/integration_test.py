@@ -65,6 +65,11 @@ def test_POST_newProduct_Fail_NonNumberPrice():
     assert response.status_code == 400
     assert response.reason == "BAD REQUEST"
 
+def test_POST_newProduct_Fail_ProductAlreadyInDB():
+    response = requests.post(url + '/produce', data={'name' : 'lettuce', 'price' : '2'})
+    assert response.status_code == 409
+    assert response.reason == "CONFLICT"
+
 def test_DELETE_product_Fail_NotFound():
     response = requests.get(url + '/produce' + '/CODE-ISNT-HERE-OOPS')
     assert response.status_code == 404
