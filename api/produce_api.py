@@ -79,15 +79,15 @@ performValidation executes validation functions all at once
 def performValidation(name, price, PRODUCE):
 
     if not ensureUniqueItem(name, PRODUCE):
-        return False
+        return "Conflict", 409
 
     if not validateName(name):
-        return False
+        return "InvalidInput", 480
 
     if not validatePrice(price):
-        return False
+        return "InvalidInput", 480
 
-    return True
+    return 200
 
 """
 generateProduceCode will generate a unique code for each produce in our dict
@@ -144,8 +144,9 @@ class ProduceList(Resource):
         parser.add_argument("price")
         args = parser.parse_args()
 
-        if not performValidation(args['name'], args['price'], PRODUCE):
-            return "Invalid Request", 400
+        validPostCheck = performValidation(args['name'], args['price'], PRODUCE)
+        if not validPostCheck == 200:
+            return validPostCheck
 
         formattedPrice = formatPrice(args['price'])
         produce_id = generateProduceCode()
