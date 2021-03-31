@@ -3,7 +3,7 @@ import pytest
 import flask
 import produce_api
 
-url="http://127.0.0.1:5000"
+url="http://0.0.0.0:5000"
 
 def test_GET_produceList_Success():
     response = requests.get(url + '/produce')
