@@ -223,22 +223,11 @@ Response body:
 
 ## Testing
 
-Produce API has two testing files, unit_test.py and integration_test.py. Together these tests serve to ensure the api works as expected and asked per design. These test files are located in the 'api/' folder. You must run all tests from this folder.
+Produce API has two testing files, unit_test.py and integration_test.py. Together these tests serve to ensure the api works as expected and per design. These test files are located in the 'api/' folder. You must run all tests from this folder.
 
 **NOTE:** You must be in the /api folder to run the tests properly. Before performing any tests, perform:
 
 ​	`cd api`
-
-### Test Script
-
-Provided is a bash script `runtests.sh` which has made the process of running the tests simple. In order to execute (ensuring you've called `cd api`):
-
-​	`./runtests.sh`
-
-This will perform the following tasks:
-
-- Start test server as a background process
-- Execute unit_test.py and integration_test.py with HTML reporting enabled
 
 ### Starting the Server
 
@@ -259,6 +248,17 @@ This will allow the you to have continued access to the command prompt after sta
 ​		This will list all processes running. Find the one that ends with `python` and locate it's `pid`. Then, run:
 
 ​		`kill -9 <pid>`
+
+### Test Script
+
+Provided is a bash script `runtests.sh` which has made the process of running the tests simple. In order to execute (ensuring you've called `cd api`):
+
+​	`./runtests.sh`
+
+This will perform the following tasks:
+
+- Start test server as a background process
+- Execute unit_test.py and integration_test.py with HTML reporting enabled
 
 ### Running the Tests
 
@@ -294,13 +294,21 @@ This will spawn the container. You can confirm the container is running with the
 
 `docker container ps`
 
-This will return information about the container, as well as the container id
+This will return information about the container, as well as the container id.
 
-Once the container is running, the server is running with-in. You can make requests to the server that is running in the container the same way you do with a server running locally, at port `127.0.0.1:5000`
+Once the container is running, the server is running with-in. You can make requests to the server that is running in the container the same way you do with a server running locally, at port `127.0.0.1:5000`.
 
 To kill the docker container:
 
 `docker kill <container id>`
+
+## Github Actions
+
+This repo has testing setup via Github Actions that runs our tests with each push to the repository. This can be found in the `.github/workflows` folder. You can view runs test via the [Actions](https://github.com/colbyveal/produce_api/actions) tab.
+
+The structure of the pipeline is `Run Unit Tests -> Run Integration Tests -> Publish Test Results`. 
+
+
 
 
 
