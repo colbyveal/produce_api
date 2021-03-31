@@ -221,17 +221,13 @@ Response body:
 <Empty Response Body>
 ```
 
-## Testing
+## Starting the Server ##
 
-Produce API has two testing files, unit_test.py and integration_test.py. Together these tests serve to ensure the api works as expected and per design. These test files are located in the 'api/' folder. You must run all tests from this folder.
-
-**NOTE:** You must be in the /api folder to run the tests properly. Before performing any tests, perform:
+**NOTE:** You must be in the /api folder to run the server properly. Before performing any tests, perform:
 
 ​	`cd api`
 
-### Starting the Server
-
-Before running tests locally, the server will need to be started. To start the server (ensuring you've called `cd api`):
+To start the server (ensuring you've called `cd api`):
 
 ​	`python produce_api.py`
 
@@ -248,6 +244,14 @@ This will allow the you to have continued access to the command prompt after sta
 ​		This will list all processes running. Find the one that ends with `python` and locate it's `pid`. Then, run:
 
 ​		`kill -9 <pid>`
+
+## Testing
+
+Produce API has two testing files, unit_test.py and integration_test.py. Together these tests serve to ensure the api works as expected and per design. These test files are located in the 'api/' folder. You must run all tests from this folder.
+
+**NOTE:** You must be in the /api folder to run the tests properly. Before performing any tests, perform:
+
+​	`cd api`
 
 ### Test Script
 
