@@ -2,4 +2,4 @@
 
 nohup python produce_api.py &
 
-pytest -vv --html=report.html
+python -m pytest --junitxml=report.xml
