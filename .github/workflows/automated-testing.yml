@@ -63,10 +63,7 @@ jobs:
     needs: run-integration-tests
     runs-on: ubuntu-latest
     steps:
-
-      - name: Make test results directory
-        run: mkdir test-results
-
+    
       - name: Download Unit Test results
         uses: actions/download-artifact@v2
         with:
